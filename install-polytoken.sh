@@ -29,6 +29,12 @@ CLONE_DIR=${CLONE_DIR:-"${XDG_DATA_HOME:-$HOME/.local/share}/polytoken-config"}
 
 DRY_RUN=${DRY_RUN:-}
 
+# PATH as inherited from the calling shell, before this script extends it.
+# The end-of-script persistence check compares against this, so a directory
+# the script itself added to the session PATH is still recognized as missing
+# from the user's profile.
+ORIGINAL_PATH=$PATH
+
 log() { printf '%s\n' "install-polytoken: $*"; }
 die() { printf '%s\n' "install-polytoken: ERROR: $*" >&2; exit 1; }
 
@@ -90,10 +96,6 @@ else
     fi
 fi
 
-if [ -z "$DRY_RUN" ] && ! command -v polytoken >/dev/null 2>&1; then
-    die "polytoken was installed but is not on PATH; add \$HOME/.local/bin to PATH and re-run"
-fi
-
 # --- pull the config repo ----------------------------------------------------
 
 if [ -d "$CLONE_DIR/.git" ]; then
@@ -131,6 +133,45 @@ if [ -n "$DRY_RUN" ]; then
 else
     ( cd "$CONFIG_DIR" && find . -type f -not -name '*.bak.*' | sort | sed 's/^/  /' )
 fi
+
+# --- make sure polytoken is on PATH -------------------------------------------
+
+# Where the binary ended up: command -v, or the installer's fallback location.
+BIN_PATH="$(command -v polytoken 2>/dev/null || echo "$HOME/.local/bin/polytoken")"
+BIN_DIR="$(dirname "$BIN_PATH")"
+
+if [ -z "$DRY_RUN" ] && [ ! -x "$BIN_PATH" ]; then
+    die "polytoken binary not found at $BIN_PATH after install"
+fi
+
+case ":$ORIGINAL_PATH:" in
+    *":$BIN_DIR:"*)
+        log "polytoken is on PATH: $BIN_PATH"
+        ;;
+    *)
+        log "$BIN_DIR is not on PATH; adding it to your shell profile..."
+        # Match the login shell's config: zsh reads .zshrc, bash reads
+        # .bashrc; .profile is the portable fallback. Idempotent via the
+        # marker comment so re-runs do not duplicate the line.
+        case "${SHELL:-}" in
+            *zsh)  PROFILE="$HOME/.zshrc" ;;
+            *bash) PROFILE="$HOME/.bashrc" ;;
+            *)     PROFILE="$HOME/.profile" ;;
+        esac
+        [ -f "$PROFILE" ] || PROFILE="$HOME/.profile"
+        LINE="export PATH=\"$BIN_DIR:\$PATH\" # added by install-polytoken.sh"
+        if [ -f "$PROFILE" ] && grep -qF 'added by install-polytoken.sh' "$PROFILE"; then
+            log "$PROFILE already contains the PATH line; nothing to do"
+        else
+            if [ -n "$DRY_RUN" ]; then
+                printf '  [dry-run] append to %s: %s\n' "$PROFILE" "$LINE"
+            else
+                printf '\n%s\n' "$LINE" >> "$PROFILE"
+                log "added PATH line to $PROFILE (takes effect in new shells)"
+            fi
+        fi
+        ;;
+esac
 
 # --- validate -----------------------------------------------------------------
 
