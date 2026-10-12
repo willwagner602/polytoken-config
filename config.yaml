@@ -1,0 +1,260 @@
+default_permission_matcher: bypass_plus
+modelgroups:
+  polytoken:default_model_full:
+    - glm-flash-opencode
+    - glm-flash-zai
+    - codex-gpt-6-luna(medium)
+    - neuralwatt/glm-5.3-flash(medium)
+
+  polytoken:default_model_mini:
+    - neuralwatt/glm-5.3-flash(low)
+    - glm-flash-opencode
+    - glm-flash-zai
+    - codex-gpt-6-luna(low)
+
+  polytoken:default_model_nano:
+    - glm-flash-opencode
+    - glm-flash-zai
+    - neuralwatt/glm-5.3-flash(low)
+
+integrations:
+    search:
+        providers:
+            brave:
+                enabled: true
+                key: ${BRAVE_API_KEY}
+            exa:
+                enabled: true
+                key: ${EXA_API_KEY}
+            kagi:
+                enabled: true
+                key: ${KAGI_API_KEY}
+            tavily:
+                enabled: true
+                key: ${TAVILY_API_KEY}
+        strategy: round_robin
+mcp_servers:
+    github:
+        transport: http
+        url: https://api.githubcopilot.com/mcp/readonly
+        default_enabled: false
+    komodo:
+        transport: http
+        url: http://127.0.0.1:8000/mcp
+        default_enabled: false
+    home-assistant:
+        transport: http
+        url: http://10.0.0.16:8123/api/mcp/assist
+        default_enabled: false
+        # Add auth.value: "Bearer <token>" after setting HA_TOKEN locally.
+    playwright:
+        transport: stdio
+        command: npx
+        args: ["-y", "@playwright/mcp@latest"]
+        default_enabled: false
+    context7:
+        transport: http
+        url: https://mcp.context7.com/mcp
+        default_enabled: false
+    arr:
+        transport: http
+        url: http://127.0.0.1:6060/mcp
+        default_enabled: false
+    unifi:
+        transport: stdio
+        command: uvx
+        args: ["unifi-network-mcp@latest"]
+        default_enabled: false
+        pass_env: ["PATH", "UNIFI_HOST", "UNIFI_USERNAME", "UNIFI_PASSWORD"]
+    pihole:
+        transport: stdio
+        command: pihole-mcp
+        args: []
+        default_enabled: false
+        env:
+            PIHOLE_READ_ONLY: "true"
+        pass_env: ["PATH", "PIHOLE_URL", "PIHOLE_PASSWORD"]
+    frigate:
+        transport: stdio
+        command: uvx
+        args: ["--from", "git+https://github.com/jakekeeys/frigate-mcp", "frigate-mcp"]
+        default_enabled: false
+        pass_env: ["PATH", "FRIGATE_URL"]
+models:
+    deepseek-flash-opencode:
+      provider: opencode-go
+      provider_name: deepseek-v4.1-flash
+      variant: other
+      class: mini
+      context_window: 1000000
+
+    deepseek-flash-api:
+      provider: deepseek
+      provider_name: deepseek-flash
+      variant: other
+      class: mini
+      context_window: 1000000
+
+    glm-flash-opencode:
+      provider: opencode-go
+      provider_name: glm-5.3-flash
+      variant: other
+      class: mini
+      context_window: 1000000
+
+    glm-flash-zai:
+      provider: zai
+      provider_name: glm-5.3-flash
+      variant: other
+      class: mini
+      context_window: 1000000
+
+    codex-gpt-6-astra:
+        class: full
+        context_window: 128000
+        enabled: true
+        max_output_tokens_per_turn: 16384
+        max_tokens: 16384
+        provider: codex
+        provider_name: gpt-6-astra
+        variant: openai
+    codex-gpt-6-luna:
+        class: full
+        context_window: 128000
+        enabled: true
+        max_output_tokens_per_turn: 16384
+        max_tokens: 16384
+        provider: codex
+        provider_name: gpt-6-luna
+        variant: openai
+    codex-gpt-6-sol:
+        class: full
+        context_window: 128000
+        enabled: true
+        max_output_tokens_per_turn: 16384
+        max_tokens: 16384
+        provider: codex
+        provider_name: gpt-6-sol
+        variant: openai
+    opencode-deepseek-v4-pro:
+        class: full
+        context_window: 128000
+        enabled: true
+        max_output_tokens_per_turn: 8192
+        max_tokens: 8192
+        provider: opencode-go
+        provider_name: deepseek-v4-pro
+        variant: openai
+    opencode-deepseek-v4.1-flash:
+        class: full
+        context_window: 128000
+        enabled: true
+        max_output_tokens_per_turn: 8192
+        max_tokens: 8192
+        provider: opencode-go
+        provider_name: deepseek-v4.1-flash
+        variant: openai
+    opencode-glm-5.3-flash:
+        class: full
+        context_window: 128000
+        enabled: true
+        max_output_tokens_per_turn: 8192
+        max_tokens: 8192
+        provider: opencode-go
+        provider_name: glm-5.3-flash
+        variant: openai
+    opencode-jev-1.13:
+        class: full
+        context_window: 128000
+        enabled: true
+        max_output_tokens_per_turn: 8192
+        max_tokens: 8192
+        provider: opencode-zen-systemone
+        provider_name: jev-1.13
+        variant: openai
+    opencode-jev-1.13-free:
+        class: full
+        context_window: 128000
+        enabled: true
+        max_output_tokens_per_turn: 8192
+        max_tokens: 8192
+        provider: opencode-zen-systemone
+        provider_name: jev-1.13-free
+        variant: openai
+    opencode-kimi-k2.7-code:
+        class: full
+        context_window: 128000
+        enabled: true
+        max_output_tokens_per_turn: 8192
+        max_tokens: 8192
+        provider: opencode-go
+        provider_name: kimi-k2.7-code
+        variant: openai
+    opencode-kimi-k3:
+        class: full
+        context_window: 128000
+        enabled: true
+        max_output_tokens_per_turn: 8192
+        max_tokens: 8192
+        provider: opencode-go
+        provider_name: kimi-k3
+        variant: openai
+    opencode-qwen3.6-plus:
+        class: full
+        context_window: 128000
+        enabled: true
+        max_output_tokens_per_turn: 8192
+        max_tokens: 8192
+        provider: opencode-go
+        provider_name: qwen3.6-plus
+        variant: openai
+    opencode-qwen3.8-flash:
+        class: full
+        context_window: 128000
+        enabled: true
+        max_output_tokens_per_turn: 8192
+        max_tokens: 8192
+        provider: opencode-go
+        provider_name: qwen3.8-flash
+        variant: openai
+providers:
+    codex:
+        auth:
+            profile: default
+            type: codex_device
+        kind:
+            name: codex
+            type: catalog
+    neuralwatt:
+        auth:
+            key: ${NEURALWATT_API_KEY}
+            type: static_key
+        kind:
+            name: neuralwatt
+            type: catalog
+    opencode-go:
+        auth:
+            key: ${OPENCODE_API_KEY}
+            type: static_key
+        headers:
+            x-opencode-session: c958c9bd-4f2f-448d-b978-aec912a72f75
+        kind:
+            type: custom_open_ai_compatible
+        protocol: openai_chat_completions
+        url: https://opencode.ai/zen/go/v1
+    opencode-zen-systemone:
+        auth:
+            key: ${OPENCODE_API_KEY}
+            type: static_key
+        kind:
+            type: custom_open_ai_compatible
+        protocol: openai_chat_completions
+        url: https://opencode.ai/zen/v1/systemone
+    zai:
+        auth:
+            key: ${ZAI_API_KEY}
+            type: static_key
+        kind:
+            name: zai
+            type: catalog
+version: 2
