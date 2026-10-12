@@ -1,0 +1,5 @@
+# Local backup configs
+*.yaml.bak*
+
+# Prompt history can contain private prompts
+/prompt_history/
