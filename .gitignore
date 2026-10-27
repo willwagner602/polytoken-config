@@ -3,3 +3,4 @@
 
 # Prompt history can contain private prompts
 /prompt_history/
+permissions.local.yaml
