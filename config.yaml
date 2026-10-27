@@ -1,38 +1,66 @@
 default_permission_matcher: bypass_plus
 modelgroups:
   polytoken:default_model_full:
-    - glm-flash-opencode
-    - glm-flash-zai
-    - codex-gpt-6-luna(medium)
+    - opencode-glm-5.3-flash
+    - zai/glm-5.3-flash
+    - codex/gpt-6-luna(medium)
     - neuralwatt/glm-5.3-flash(medium)
+    - mistral/mistral-medium-3.5
+    - cloudflare-workers-ai/@cf/moonshotai/kimi-k2.7-code
+    - groq/qwen/qwen3.8-27b
+    - nvidia-nim/nvidia/nemotron-3.5-super-vl-120b-a12b
+    - openrouter/anthropic/claude-opus-5.5
 
   polytoken:default_model_mini:
     - neuralwatt/glm-5.3-flash(low)
-    - glm-flash-opencode
-    - glm-flash-zai
-    - codex-gpt-6-luna(low)
+    - opencode-glm-5.3-flash
+    - zai/glm-5.3-flash
+    - codex/gpt-6-luna(low)
+    - mistral/mistral-small-2603
+    - cloudflare-workers-ai/@cf/zai-org/glm-5.3-flash
+    - groq/openai/gpt-oss-120b
+    - nvidia-nim/nvidia/nemotron-3.5-lightning-30b-a3b
+    - openrouter/z-ai/glm-5.3-flash
 
   polytoken:default_model_nano:
-    - glm-flash-opencode
-    - glm-flash-zai
+    - opencode-glm-5.3-flash
+    - zai/glm-5.3-flash
     - neuralwatt/glm-5.3-flash(low)
+    - mistral/mistral-small-2603
+    - cloudflare-workers-ai/@cf/zai-org/glm-5.3-flash
+    - groq/openai/gpt-oss-120b
+    - nvidia-nim/nvidia/nemotron-3.5-lightning-30b-a3b
+    - openrouter/z-ai/glm-5.3-flash
 
 integrations:
     search:
         providers:
             brave:
-                enabled: true
+                enabled: false
                 key: ${BRAVE_API_KEY}
             exa:
                 enabled: true
                 key: ${EXA_API_KEY}
             kagi:
-                enabled: true
+                enabled: false
                 key: ${KAGI_API_KEY}
             tavily:
-                enabled: true
+                enabled: false
                 key: ${TAVILY_API_KEY}
+            parallel:
+                enabled: true
+                key: ${PARALLEL_API_KEY}
+            you:
+                enabled: false
+                key: ${YOU_API_KEY}
         strategy: round_robin
+    decisions:
+        active: jev-systemone
+        backends:
+            jev-systemone:
+                type: typesafe
+                key: ${TYPESAFE_API_KEY}
+                model: jev-latest
 mcp_servers:
     github:
         transport: http
@@ -101,6 +129,7 @@ models:
       variant: other
       class: mini
       context_window: 1000000
+      enabled: false
 
     glm-flash-zai:
       provider: zai
@@ -108,11 +137,12 @@ models:
       variant: other
       class: mini
       context_window: 1000000
+      enabled: false
 
     codex-gpt-6-astra:
         class: full
         context_window: 128000
-        enabled: true
+        enabled: false
         max_output_tokens_per_turn: 16384
         max_tokens: 16384
         provider: codex
@@ -121,7 +151,7 @@ models:
     codex-gpt-6-luna:
         class: full
         context_window: 128000
-        enabled: true
+        enabled: false
         max_output_tokens_per_turn: 16384
         max_tokens: 16384
         provider: codex
@@ -130,7 +160,7 @@ models:
     codex-gpt-6-sol:
         class: full
         context_window: 128000
-        enabled: true
+        enabled: false
         max_output_tokens_per_turn: 16384
         max_tokens: 16384
         provider: codex
@@ -217,6 +247,199 @@ models:
         provider: opencode-go
         provider_name: qwen3.8-flash
         variant: openai
+    groq-gpt-oss-120b:
+        class: full
+        context_window: 128000
+        provider: groq
+        provider_name: openai/gpt-oss-120b
+        variant: openai
+    nvidia-llama-3.3-70b:
+        class: full
+        context_window: 128000
+        provider: nvidia-nim
+        provider_name: meta/llama-3.3-70b-instruct
+        variant: openai
+    openrouter-free:
+        class: full
+        context_window: 128000
+        provider: openrouter
+        provider_name: openrouter/free
+        variant: openai
+    cloudflare-gpt-oss-20b:
+        class: full
+        context_window: 128000
+        provider: cloudflare-workers-ai
+        provider_name: "@cf/openai/gpt-oss-20b"
+        variant: openai
+    mistral-small:
+        class: full
+        context_window: 128000
+        provider: mistral
+        provider_name: mistral-small-latest
+        variant: openai
+    mistral/mistral-medium-3.5:
+        class: full
+        context_window: 128000
+        provider: mistral
+        provider_name: mistral-medium-3.5
+        variant: openai
+    cloudflare-workers-ai/@cf/moonshotai/kimi-k2.7-code:
+        class: full
+        context_window: 262144
+        provider: cloudflare-workers-ai
+        provider_name: "@cf/moonshotai/kimi-k2.7-code"
+        variant: openai
+    groq/qwen/qwen3.8-27b:
+        class: full
+        context_window: 131072
+        provider: groq
+        provider_name: qwen/qwen3.8-27b
+        variant: openai
+    nvidia-nim/nvidia/nemotron-3.5-super-vl-120b-a12b:
+        class: full
+        context_window: 1000000
+        provider: nvidia-nim
+        provider_name: nvidia/nemotron-3.5-super-vl-120b-a12b
+        variant: openai
+    openrouter/anthropic/claude-opus-5.5:
+        class: full
+        context_window: 200000
+        provider: openrouter
+        provider_name: anthropic/claude-opus-5.5
+        variant: openai
+    mistral/mistral-small-2603:
+        class: mini
+        context_window: 128000
+        provider: mistral
+        provider_name: mistral-small-2603
+        variant: openai
+    cloudflare-workers-ai/@cf/zai-org/glm-5.3-flash:
+        class: mini
+        context_window: 1000000
+        provider: cloudflare-workers-ai
+        provider_name: "@cf/zai-org/glm-5.3-flash"
+        variant: openai
+    groq/openai/gpt-oss-120b:
+        class: mini
+        context_window: 131072
+        provider: groq
+        provider_name: openai/gpt-oss-120b
+        variant: openai
+    nvidia-nim/nvidia/nemotron-3.5-lightning-30b-a3b:
+        class: mini
+        context_window: 1000000
+        provider: nvidia-nim
+        provider_name: nvidia/nemotron-3.5-lightning-30b-a3b
+        variant: openai
+    openrouter/z-ai/glm-5.3-flash:
+        class: mini
+        context_window: 1000000
+        provider: openrouter
+        provider_name: z-ai/glm-5.3-flash
+        variant: openai
+    # Hide current models outside the explicit allowlist.
+    deepseek-flash-opencode:
+        enabled: false
+    deepseek-flash-api:
+        enabled: false
+    codex/gpt-5.5:
+        enabled: false
+    codex/gpt-5.6-sol:
+        enabled: false
+    codex/gpt-5.6-sol-1m:
+        enabled: false
+    codex/gpt-5.6-terra:
+        enabled: false
+    codex/gpt-5.6-terra-1m:
+        enabled: false
+    codex/gpt-5.6-luna:
+        enabled: false
+    codex/gpt-5.6-luna-1m:
+        enabled: false
+    codex/gpt-daybreak-blue-latest:
+        enabled: false
+    codex/gpt-6-astra-1m:
+        enabled: false
+    codex/gpt-6-sol:
+        enabled: false
+    codex/gpt-6-sol-1m:
+        enabled: false
+    codex/gpt-6-luna-1m:
+        enabled: false
+    codex/gpt-6.1-sol-1m:
+        enabled: false
+    zai/glm-5.3:
+        enabled: false
+    zai/glm-5.2:
+        enabled: false
+    neuralwatt/deepseek-v4-flash:
+        enabled: false
+    neuralwatt/deepseek-v4-flash-flex:
+        enabled: false
+    neuralwatt/deepseek-v4-flash-speed:
+        enabled: false
+    neuralwatt/deepseek-v4.1-flash-flex:
+        enabled: false
+    neuralwatt/deepseek-v4.1-flash-speed:
+        enabled: false
+    neuralwatt/gemma-4-31b:
+        enabled: false
+    neuralwatt/glm-5.3:
+        enabled: false
+    neuralwatt/glm-5.3-flash-flex:
+        enabled: false
+    neuralwatt/glm-5.3-flex:
+        enabled: false
+    neuralwatt/kimi-k3:
+        enabled: false
+    neuralwatt/kimi-k3-fast:
+        enabled: false
+    neuralwatt/kimi-k3-flex:
+        enabled: false
+    neuralwatt/mimo-v2.6-pro:
+        enabled: false
+    neuralwatt/mimo-v2.6-pro-flex:
+        enabled: false
+    neuralwatt/nw-flash:
+        enabled: false
+    neuralwatt/nw-flash-flex:
+        enabled: false
+    neuralwatt/nw-large:
+        enabled: false
+    neuralwatt/nw-large-flex:
+        enabled: false
+    neuralwatt/nw-small:
+        enabled: false
+    neuralwatt/nw-small-flex:
+        enabled: false
+    neuralwatt/qwen-3.8-27b-flex:
+        enabled: false
+    neuralwatt/qwen3.6-35b:
+        enabled: false
+    neuralwatt/qwen3.6-35b-fast:
+        enabled: false
+    neuralwatt/qwen3.6-35b-flex:
+        enabled: false
+    opencode-deepseek-v4-pro:
+        enabled: false
+    opencode-jev-1.13:
+        enabled: false
+    opencode-jev-1.13-free:
+        enabled: false
+    opencode-kimi-k2.7-code:
+        enabled: false
+    opencode-qwen3.6-plus:
+        enabled: false
+    groq-gpt-oss-120b:
+        enabled: false
+    nvidia-llama-3.3-70b:
+        enabled: false
+    openrouter-free:
+        enabled: false
+    cloudflare-gpt-oss-20b:
+        enabled: false
+    mistral-small:
+        enabled: false
 providers:
     codex:
         auth:
@@ -257,4 +480,44 @@ providers:
         kind:
             name: zai
             type: catalog
+    groq:
+        auth:
+            key: ${GROQ_API_KEY}
+            type: static_key
+        kind:
+            type: custom_open_ai_compatible
+        protocol: openai_chat_completions
+        url: https://api.groq.com/openai/v1
+    nvidia-nim:
+        auth:
+            key: ${NVIDIA_API_KEY}
+            type: static_key
+        kind:
+            type: custom_open_ai_compatible
+        protocol: openai_chat_completions
+        url: https://integrate.api.nvidia.com/v1
+    openrouter:
+        auth:
+            key: ${OPENROUTER_API_KEY}
+            type: static_key
+        kind:
+            type: custom_open_ai_compatible
+        protocol: openai_chat_completions
+        url: https://openrouter.ai/api/v1
+    cloudflare-workers-ai:
+        auth:
+            key: ${CLOUDFLARE_API_TOKEN}
+            type: static_key
+        kind:
+            type: custom_open_ai_compatible
+        protocol: openai_chat_completions
+        url: https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/ai/v1
+    mistral:
+        auth:
+            key: ${MISTRAL_API_KEY}
+            type: static_key
+        kind:
+            type: custom_open_ai_compatible
+        protocol: openai_chat_completions
+        url: https://api.mistral.ai/v1
 version: 2
