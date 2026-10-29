@@ -5,7 +5,7 @@ modelgroups:
     - zai/glm-5.3-flash
     - codex/gpt-6-luna(medium)
     - neuralwatt/glm-5.3-flash(medium)
-    - mistral/mistral-medium-3.5
+    - mistral/deepseek-v4-1-flash-1017
     - cloudflare-workers-ai/@cf/moonshotai/kimi-k2.7-code
     - groq/qwen/qwen3.8-27b
     - nvidia-nim/nvidia/nemotron-3.5-super-vl-120b-a12b
@@ -16,7 +16,7 @@ modelgroups:
     - opencode-glm-5.3-flash
     - zai/glm-5.3-flash
     - codex/gpt-6-luna(low)
-    - mistral/mistral-small-2603
+    - mistral/zai-glm-5-3-flash
     - cloudflare-workers-ai/@cf/zai-org/glm-5.3-flash
     - groq/openai/gpt-oss-120b
     - nvidia-nim/nvidia/nemotron-3.5-lightning-30b-a3b
@@ -26,7 +26,7 @@ modelgroups:
     - opencode-glm-5.3-flash
     - zai/glm-5.3-flash
     - neuralwatt/glm-5.3-flash(low)
-    - mistral/mistral-small-2603
+    - mistral/zai-glm-5-3-flash
     - cloudflare-workers-ai/@cf/zai-org/glm-5.3-flash
     - groq/openai/gpt-oss-120b
     - nvidia-nim/nvidia/nemotron-3.5-lightning-30b-a3b
@@ -277,11 +277,11 @@ models:
         provider: mistral
         provider_name: mistral-small-latest
         variant: openai
-    mistral/mistral-medium-3.5:
+    mistral/deepseek-v4-1-flash-1017:
         class: full
-        context_window: 128000
+        context_window: 1000000
         provider: mistral
-        provider_name: mistral-medium-3.5
+        provider_name: deepseek-v4-1-flash-1017
         variant: openai
     cloudflare-workers-ai/@cf/moonshotai/kimi-k2.7-code:
         class: full
@@ -307,11 +307,11 @@ models:
         provider: openrouter
         provider_name: anthropic/claude-opus-5.5
         variant: openai
-    mistral/mistral-small-2603:
+    mistral/zai-glm-5-3-flash:
         class: mini
-        context_window: 128000
+        context_window: 1000000
         provider: mistral
-        provider_name: mistral-small-2603
+        provider_name: zai-glm-5-3-flash
         variant: openai
     cloudflare-workers-ai/@cf/zai-org/glm-5.3-flash:
         class: mini
@@ -439,6 +439,10 @@ models:
     cloudflare-gpt-oss-20b:
         enabled: false
     mistral-small:
+        enabled: false
+    mistral/mistral-medium-3.5:
+        enabled: false
+    mistral/mistral-small-2603:
         enabled: false
 providers:
     codex:
