@@ -74,7 +74,9 @@ mcp_servers:
         transport: http
         url: http://10.0.0.16:8123/api/mcp/assist
         default_enabled: false
-        # Add auth.value: "Bearer <token>" after setting HA_TOKEN locally.
+#        auth:
+#            type: authorization-header
+#            value: "Bearer <token>"
     playwright:
         transport: stdio
         command: npx
@@ -108,6 +110,13 @@ mcp_servers:
         args: ["--from", "git+https://github.com/jakekeeys/frigate-mcp", "frigate-mcp"]
         default_enabled: false
         pass_env: ["PATH", "FRIGATE_URL"]
+    woodpecker:
+        transport: http
+        url: http://127.0.0.1:8001/mcp
+        default_enabled: false
+        auth:
+            type: authorization-header
+            value: "Bearer ${WOODPECKER_MCP_TOKEN}"
 models:
     deepseek-flash-opencode:
       provider: opencode-go
