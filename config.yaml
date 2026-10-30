@@ -5,7 +5,7 @@ modelgroups:
     - zai/glm-5.3-flash
     - codex/gpt-6-luna(medium)
     - neuralwatt/glm-5.3-flash(medium)
-    - mistral/deepseek-v4-1-flash-1017
+    - mistral/mistral-large-4
     - cloudflare-workers-ai/@cf/moonshotai/kimi-k2.7-code
     - groq/qwen/qwen3.8-27b
     - nvidia-nim/nvidia/nemotron-3.5-super-vl-120b-a12b
@@ -286,11 +286,11 @@ models:
         provider: mistral
         provider_name: mistral-small-latest
         variant: openai
-    mistral/deepseek-v4-1-flash-1017:
+    mistral/mistral-large-4:
         class: full
         context_window: 1000000
         provider: mistral
-        provider_name: deepseek-v4-1-flash-1017
+        provider_name: mistral-large-4
         variant: openai
     cloudflare-workers-ai/@cf/moonshotai/kimi-k2.7-code:
         class: full
@@ -452,6 +452,8 @@ models:
     mistral/mistral-medium-3.5:
         enabled: false
     mistral/mistral-small-2603:
+        enabled: false
+    mistral/deepseek-v4-1-flash-1017:
         enabled: false
 providers:
     codex:
