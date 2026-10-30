@@ -292,6 +292,12 @@ models:
         provider: mistral
         provider_name: mistral-large-4
         variant: openai
+    mistral/deepseek-v4-1-flash-1017:
+        class: full
+        context_window: 1000000
+        provider: mistral
+        provider_name: deepseek-v4-1-flash-1017
+        variant: openai
     cloudflare-workers-ai/@cf/moonshotai/kimi-k2.7-code:
         class: full
         context_window: 262144
@@ -452,8 +458,6 @@ models:
     mistral/mistral-medium-3.5:
         enabled: false
     mistral/mistral-small-2603:
-        enabled: false
-    mistral/deepseek-v4-1-flash-1017:
         enabled: false
 providers:
     codex:
